@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../index';
+import app from '../app';
 import { Trial } from './trial.types';
 
 describe('GET /api/trials', () => {
