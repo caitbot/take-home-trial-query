@@ -1,11 +1,18 @@
 import { program } from "commander";
+import { fetchTrials } from "./trials";
 
 program
   .name("inato-cli")
-  .command("trials")
+  .command("trials <countryCode>")
   .description("get the list of clinical trials")
-  .action(async () => {
-    const response = await fetch("http://localhost:8080/ping");
-    console.log(await response.text());
-  })
-  .parseAsync(process.argv);
+  .action(async (countryCode: string) => {
+    try {
+      const trials = await fetchTrials(countryCode);
+      trials.length ? console.log(trials.join("\n")) : console.log("No ongoing trials found.");
+    } catch (error) {
+      console.error((error as Error).message);
+      process.exit(1);
+    }
+  });
+  
+  program.parseAsync(process.argv);
