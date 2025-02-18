@@ -1,4 +1,26 @@
-# Context
+## How to run and test
+You may run the server with `pnpm api start` and you may run the tests with `pnpm api test`. When running the tests, shut down the server (more on this in notes, you will get a port conflict otherwise).
+
+You may run the cli with `pnpm cli start trials FR` (or replace FR with country code of your choice)
+
+All commands may also be run from their dedicated subdirectories, as described in the original individual README.md, with `pnpm start`.
+
+## Notes from implementing
+Below are notes I took while working about various decisions I made and follow-ups I would do.
+
+Break index.ts into app.ts and server.ts, separating out app instantiation and server startup - would allow separation of concerns and ability to start app without server. I did not get around to this and because of that, you cannot run the tests while the server is running due to a port conflict, so it is pretty important.
+
+The trial service currently loads the JSON data on every request - not optimal if this were a huge data file. Potential improvement is storing the data as a class variable. This introduces the risk of stale data if the file changes while the app is running. The ideal solution would be caching or a periodic refresh to keep the data up to date. However, given that this is a mock of an external service, that’s out of scope.
+
+Feature vs functionality based directory structure - initially chose functionality-based (RCSM) due to the project's small size, but switched to feature-based for increased colocation of related feature code.
+
+I duplicated the trials type in the backend and frontend - if this were a bigger project with more shared typings, I would move it to a package shared between the two projects.
+
+All of the provided trials are ongoing based on their dates - I didn’t add data in order to add a test case but if real life, I would have a test case and data to mock this scenario.
+
+I wanted to write tests for the client but ran into a typing issue with jest-mock-fetch. Reached my timebox on debugging and decided to omit.
+
+## Beginning of original problem description and context
 
 As a senior product engineer in the team, you suggested to build an internal tool for our customer success team. You agreed with the product team on the following milestones.
 
